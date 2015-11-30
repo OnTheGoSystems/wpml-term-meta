@@ -26,6 +26,13 @@ WpmlTermMetaMock.compiledTemplates = {};
             '<p id="wpml-tmm-term-name"><span></span>Name: <span><%=name%></span></p>',
             '<p id="wpml-tmm-term-id"><span></span>Term_ID: <span><%=id%></span></p>',
             '</div>'
+        ],
+        addField: [
+            '<div id="wpml-tmm-new">',
+            '<input type="text" id="wpml-tmm-new-key" name="wpml-tmm-new-key" />',
+            '<input type="text" id="wpml-tmm-new-value" name="wpml-tmm-new-value" />',
+            '<input type="button" value="Add" id="wpml-tmm-new-submit" name="wpml-tmm-new-submit" />',
+            '</div>'
         ]
     };
 
@@ -58,15 +65,16 @@ WpmlTermMetaMock.compiledTemplates = {};
 
     WpmlTermMetaMock.Views.TermView = Backbone.View.extend({
         model: WpmlTermMetaMock.Models.Term,
-        template: WpmlTermMetaMock.getTemplate("termDebug"),
-        render: function () {
+        debugTemplate: WpmlTermMetaMock.getTemplate("termDebug"),
+        addTemplate: WpmlTermMetaMock.getTemplate("addField"),
+        render: function (nonceField) {
             "use strict";
             var self = this;
             self.$el.html(
-                self.template({
+                self.debugTemplate({
                     name: self.model.get('name'),
                     id: self.model.get('term_id')
-                })
+                }) + self.addTemplate({}) + nonceField
             );
 
             return self;
@@ -77,13 +85,13 @@ WpmlTermMetaMock.compiledTemplates = {};
         var mainView = new WpmlTermMetaMock.Views.MainView();
         mainView.render();
         var currentTerm = new WpmlTermMetaMock.Models.Term({
-            name: WpmlTmCurrentTerm.name,
-            term_id: WpmlTmCurrentTerm.term_id
+            name: WpmlTmCurrentTerm.term.name,
+            term_id: WpmlTmCurrentTerm.term.term_id
         });
         var termView = new WpmlTermMetaMock.Views.TermView({
             model: currentTerm,
             el: mainView.$el.find('#wpml-tmm-admin-body')
         });
-        termView.render();
+        termView.render(WpmlTmCurrentTerm.nonceField);
     });
 })(WpmlTermMetaMock, WpmlTmCurrentTerm);

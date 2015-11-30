@@ -21,7 +21,10 @@ class WPML_TMM_Menu {
 			'backbone',
 			'underscore'
 		) );
-		wp_localize_script( 'wpml-tmm-admin', 'WpmlTmCurrentTerm', $this->term->to_array() );
+		wp_localize_script( 'wpml-tmm-admin', 'WpmlTmCurrentTerm', array(
+			'term'        => $this->term->to_array(),
+			'nonceField' => wpml_nonce_field( WPML_TMM_ADD_ACTION )
+		) );
 		wp_enqueue_script( 'wpml-tmm-admin' );
 	}
 }
