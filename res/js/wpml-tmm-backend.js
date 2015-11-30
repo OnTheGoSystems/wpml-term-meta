@@ -1,7 +1,8 @@
+/* globals WpmlTmCurrentTerm */
+
 WpmlTermMetaMock = {};
 WpmlTermMetaMock.Models = {};
 WpmlTermMetaMock.Views = {};
-WpmlTermMetaMock.Collections = {};
 WpmlTermMetaMock.Templates = {};
 WpmlTermMetaMock.compiledTemplates = {};
 
@@ -17,8 +18,14 @@ WpmlTermMetaMock.compiledTemplates = {};
 
     WpmlTermMetaMock.Templates = {
         main: [
-            '<h1>WPML Term Meta Mock</h1>',
+            '<h1>WPML Term Meta</h1>',
             '<div id="wpml-tmm-admin-body"></div>'
+        ],
+        termDebug: [
+            '<div id="wpml-tmm-debug">',
+            '<p id="wpml-tmm-term-name"><span></span>Name: <span><%=name%></span></p>',
+            '<p id="wpml-tmm-term-id"><span></span>Term_ID: <span><%=id%></span></p>',
+            '</div>'
         ]
     };
 
@@ -27,7 +34,6 @@ WpmlTermMetaMock.compiledTemplates = {};
         defaults: function () {
             return {
                 name: false,
-                term_id: false,
                 language_code: false,
                 taxonomy: false
             };
@@ -51,15 +57,33 @@ WpmlTermMetaMock.compiledTemplates = {};
     });
 
     WpmlTermMetaMock.Views.TermView = Backbone.View.extend({
-        model: WpmlTermMetaMock.Models.Term
-    });
+        model: WpmlTermMetaMock.Models.Term,
+        template: WpmlTermMetaMock.getTemplate("termDebug"),
+        render: function () {
+            "use strict";
+            var self = this;
+            self.$el.html(
+                self.template({
+                    name: self.model.get('name'),
+                    id: self.model.get('term_id')
+                })
+            );
 
-    WpmlTermMetaMock.Collections.Terms = Backbone.Collection.extend({
-        model: WpmlTermMetaMock.Models.Term
+            return self;
+        }
     });
 
     jQuery(document).ready(function () {
-        var view = new WpmlTermMetaMock.Views.MainView();
-        view.render();
+        var mainView = new WpmlTermMetaMock.Views.MainView();
+        mainView.render();
+        var currentTerm = new WpmlTermMetaMock.Models.Term({
+            name: WpmlTmCurrentTerm.name,
+            term_id: WpmlTmCurrentTerm.term_id
+        });
+        var termView = new WpmlTermMetaMock.Views.TermView({
+            model: currentTerm,
+            el: mainView.$el.find('#wpml-tmm-admin-body')
+        });
+        termView.render();
     });
-})(WpmlTermMetaMock);
+})(WpmlTermMetaMock, WpmlTmCurrentTerm);

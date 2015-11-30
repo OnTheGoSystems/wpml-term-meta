@@ -1,7 +1,7 @@
 <?php
 
-function wpml_tmm_render_term_edit_view() {
-	$menu = new WPML_TMM_Menu();
+function wpml_tmm_render_term_edit_view( $term ) {
+	$menu = new WPML_TMM_Menu($term);
 	$menu->render();
 }
 

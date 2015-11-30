@@ -2,6 +2,18 @@
 
 class WPML_TMM_Menu {
 
+	/** @var WP_Term $term */
+	private $term;
+
+	/**
+	 * WPML_TMM_Menu constructor.
+	 *
+	 * @param WP_Term $term
+	 */
+	public function __construct( $term ) {
+		$this->term = $term;
+	}
+
 	public function render() {
 		echo '<div id="wpml-tmm-main" />';
 		wp_register_script( 'wpml-tmm-admin', WPML_TMM_URL . '/res/js/wpml-tmm-backend.js', array(
@@ -9,6 +21,7 @@ class WPML_TMM_Menu {
 			'backbone',
 			'underscore'
 		) );
+		wp_localize_script( 'wpml-tmm-admin', 'WpmlTmCurrentTerm', $this->term->to_array() );
 		wp_enqueue_script( 'wpml-tmm-admin' );
 	}
 }
