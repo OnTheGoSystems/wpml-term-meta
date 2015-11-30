@@ -43,3 +43,28 @@ function wpml_tmm_add_meta() {
 }
 
 add_action( 'wp_ajax_wpml_tmm_ajax_add', 'wpml_tmm_add_meta' );
+
+/**
+ * Ajax Handler for adding a term meta entry
+ */
+function wpml_tmm_del_meta() {
+	if ( ! wpml_is_action_authenticated( WPML_TMM_ADD_ACTION )
+	     || ! isset( $_POST['wpml_tmm_term_id'] )
+	     || ! isset( $_POST['wpml_tmm_meta_key'] )
+	) {
+		die( 'Invalid Nonce or Request!' );
+	}
+	$wp_api      = new WPML_TMM_Wp_Api();
+	$meta_delete = new WPML_TMM_Delete_Meta_Entry(
+		$wp_api,
+		(int) $_POST['wpml_tmm_term_id'],
+		$_POST['wpml_tmm_meta_key']
+	);
+	if ( $meta_delete->deleted() ) {
+		wp_send_json_success( true );
+	} else {
+		wp_send_json_error( false );
+	}
+}
+
+add_action( 'wp_ajax_wpml_tmm_ajax_del', 'wpml_tmm_del_meta' );

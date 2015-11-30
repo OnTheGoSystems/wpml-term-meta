@@ -16,4 +16,16 @@ class WPML_TMM_Wp_Api {
 
 		return add_term_meta( $term_id, $meta_key, $meta_value, $unique );
 	}
+
+	/**
+	 * @param int    $term_id
+	 * @param string $meta_key
+	 * @param string $meta_value
+	 *
+	 * @return bool
+	 */
+	public function delete_term_meta( $term_id, $meta_key, $meta_value = "" ) {
+
+		return delete_term_meta( $term_id, $meta_key, $meta_value );
+	}
 }

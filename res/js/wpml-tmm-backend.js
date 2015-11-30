@@ -79,9 +79,30 @@ WpmlTermMetaMock.compiledTemplates = {};
                     }
                     var view = new WpmlTermMetaMock.Views.TermMetaEntry({
                         model: self,
-                        el: metaDiv
+                        el: metaDiv,
+                        attributes: {nonce: nonce}
                     });
                     view.render();
+
+                    return self;
+                }
+            });
+        },
+        delete: function (nonce, view) {
+            var self = this;
+            jQuery.ajax({
+                url: ajaxurl,
+                type: "POST",
+                data: {
+                    action: 'wpml_tmm_ajax_del',
+                    wpml_tmm_term_id: self.get('term').get('term_id'),
+                    _icl_nonce: nonce,
+                    wpml_tmm_meta_key: self.get('key')
+                },
+                success: function (response) {
+                    if (response.success) {
+                        view.remove();
+                    }
 
                     return self;
                 }
@@ -93,6 +114,9 @@ WpmlTermMetaMock.compiledTemplates = {};
         tagName: "p",
         template: WpmlTermMetaMock.getTemplate("meta"),
         model: WpmlTermMetaMock.Models.TermMetaEntry,
+        events: {
+            'click .wpml-tmm-delete-meta': 'delete'
+        },
         render: function () {
             "use strict";
 
@@ -106,6 +130,11 @@ WpmlTermMetaMock.compiledTemplates = {};
             );
 
             return self;
+        },
+        delete: function () {
+            var self = this;
+
+            self.model.delete(self.attributes.nonce, self);
         }
     });
 
