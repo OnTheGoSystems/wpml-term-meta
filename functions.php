@@ -1,18 +1,16 @@
 <?php
 
-function wpml_tmm_admin_menu() {
-	add_options_page(
-		WPML_TMM_ADMIN_MENU_NAME,
-		WPML_TMM_ADMIN_MENU_NAME,
-		'administrator',
-		'wpml-tmm',
-		'wpml_tmm_render_admin_menu'
-	);
-}
-
-function wpml_tmm_render_admin_menu() {
+function wpml_tmm_render_term_edit_view() {
 	$menu = new WPML_TMM_Menu();
 	$menu->render();
 }
 
-add_action( 'admin_menu', 'wpml_tmm_admin_menu' );
+function wpml_tmm_menu_hooks() {
+	global $wp_taxonomies;
+
+	foreach ( array_keys( $wp_taxonomies ) as $taxonomy ) {
+		add_action( "{$taxonomy}_edit_form", 'wpml_tmm_render_term_edit_view' );
+	}
+}
+
+add_action( 'init', 'wpml_tmm_menu_hooks' );
