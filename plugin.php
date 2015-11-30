@@ -14,7 +14,7 @@ define( 'WPML_TMM_ADMIN_MENU_NAME', 'WPML Term Meta' );
 define( 'WPML_TMM_PATH', dirname( __FILE__ ) );
 define( 'WPML_TMM_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
 
-define( 'WPML_TMM_ADD_ACTION', 'wpml-tmm-ajax-add' );
+define( 'WPML_TMM_ADD_ACTION', 'wpml_tmm_ajax_add' );
 
 function wpml_tmm_load() {
 	require WPML_TMM_PATH . '/lib/wpml-autoloader.class.php';

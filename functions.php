@@ -34,7 +34,12 @@ function wpml_tmm_add_meta() {
 		$_POST['wpml_tmm_meta_value']
 	);
 
-	wp_send_json_success( $meta_addition->meta_id() );
+	$meta_id = $meta_addition->meta_id();
+	if ( (int) $meta_id > 0 ) {
+		wp_send_json_success( $meta_addition->meta_id() );
+	} else {
+		wp_send_json_error( json_encode( $meta_id ) );
+	}
 }
 
-add_action( 'wp_ajax_wpml_tmm_add_meta', 'wpml_tmm_add_meta' );
+add_action( 'wp_ajax_wpml_tmm_ajax_add', 'wpml_tmm_add_meta' );
