@@ -8,10 +8,12 @@ class WPML_TMM_Menu {
 	/**
 	 * WPML_TMM_Menu constructor.
 	 *
-	 * @param WP_Term $term
+	 * @param WPML_TMM_WP_Api $wpml_tmm_wp_api
+	 * @param WP_Term         $term
 	 */
-	public function __construct( $term ) {
-		$this->term = $term;
+	public function __construct( &$wpml_tmm_wp_api, $term ) {
+		$this->wp_api = &$wpml_tmm_wp_api;
+		$this->term   = $term;
 	}
 
 	public function render() {
@@ -22,8 +24,9 @@ class WPML_TMM_Menu {
 			'underscore'
 		) );
 		wp_localize_script( 'wpml-tmm-admin', 'WpmlTmCurrentTerm', array(
-			'term'        => $this->term->to_array(),
-			'nonceField' => wpml_nonce_field( WPML_TMM_ADD_ACTION )
+			'term'       => $this->term->to_array(),
+			'nonceField' => wpml_nonce_field( WPML_TMM_ADD_ACTION ),
+			'termMeta'   => $this->wp_api->get_term_meta( $this->term->term_id )
 		) );
 		wp_enqueue_script( 'wpml-tmm-admin' );
 	}

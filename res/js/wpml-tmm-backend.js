@@ -36,10 +36,12 @@ WpmlTermMetaMock.compiledTemplates = {};
             '</div>'
         ],
         meta: [
+            '<p>',
             '<span>Meta ID: <%=id%></span>',
             '<span>Key: <%=key%></span>',
             '<span>Value: <%=value%></span>',
-            '<input type="button" value="X" class="wpml-tmm-delete-meta" />'
+            '<input type="button" value="X" class="wpml-tmm-delete-meta" />',
+            '</p>'
         ]
     };
 
@@ -121,20 +123,20 @@ WpmlTermMetaMock.compiledTemplates = {};
             "use strict";
 
             var self = this;
-            self.$el.append(
+            self.$el.add(
                 self.template({
                     id: self.model.get('meta_id'),
                     key: self.model.get('key'),
                     value: self.model.get('value')
                 })
-            );
-
+            ).appendTo(self.$el);
+            self.setElement(jQuery(self.$el.find('p').filter(':last')));
             return self;
         },
         delete: function () {
             var self = this;
-
             self.model.delete(self.attributes.nonce, self);
+            return self;
         }
     });
 
@@ -219,5 +221,21 @@ WpmlTermMetaMock.compiledTemplates = {};
             el: mainView.$el.find('#wpml-tmm-admin-body')
         });
         termView.render(WpmlTmCurrentTerm.nonceField);
+        _.each(WpmlTmCurrentTerm.termMeta, function (value, index) {
+            if (WpmlTmCurrentTerm.termMeta.hasOwnProperty(index)) {
+                _.each(value, function (subValue) {
+                    var metaView = new WpmlTermMetaMock.Views.TermMetaEntry({
+                        model: new WpmlTermMetaMock.Models.TermMetaEntry({
+                            term: currentTerm,
+                            key: index,
+                            value: subValue
+                        }),
+                        el: termView.$el.find('#wpml-tmm-admin-meta-values'),
+                        attributes: {nonce: termView.nonce()}
+                    });
+                    metaView.render();
+                });
+            }
+        });
     });
 })(WpmlTermMetaMock, WpmlTmCurrentTerm);

@@ -5,7 +5,8 @@ class WPML_TMM_Delete_Meta_Entry {
 	/** @var  WPML_TMM_Wp_Api $wp_api */
 	private $wp_api;
 
-	private $meta_id;
+	/** @var bool $deleted */
+	private $deleted;
 
 	/**
 	 * WPML_TMM_New_Meta_Entry constructor.
