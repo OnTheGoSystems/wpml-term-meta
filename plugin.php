@@ -11,10 +11,11 @@ Plugin Slug: wpml-term-meta-mock
 
 define( 'WPML_TERM_META_MOCK_VERSION', '0.1' );
 define( 'WPML_TMM_ADMIN_MENU_NAME', 'WPML TERM META MOCK' );
+define( 'WPML_TMM_PATH', dirname( __FILE__ ) );
 
 function wpml_tmm_load() {
-	require_once "lib/wpml-autoloader.class.php";
+	require WPML_TMM_PATH . '/lib/wpml-autoloader.class.php';
 	require 'functions.php';
 }
 
-do_action( 'wpml_after_init', 'wpml_tmm_load' );
+add_action( 'wpml_after_init', 'wpml_tmm_load' );

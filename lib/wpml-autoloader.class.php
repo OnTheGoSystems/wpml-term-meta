@@ -1,6 +1,6 @@
 <?php
 
-class WPML_Term_Meta_Mock_AutoLoader {
+class WPML_TMM_AutoLoader {
 	private static $accepted_prefixes;
 	private static $classes_base_folder;
 	private static $include_root;
@@ -150,4 +150,4 @@ class WPML_Term_Meta_Mock_AutoLoader {
 	}
 }
 
-WPML_AutoLoader::register();
+WPML_TMM_AutoLoader::register();
